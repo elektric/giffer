@@ -11,8 +11,15 @@ sourceCompatibility = '11'
 repositories {
 	mavenCentral()
 }
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
 
 dependencies {
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 	compile("org.springframework.boot:spring-boot-starter-web")
  	compile("org.apache.commons:commons-lang3:3.0")
     compile("commons-io:commons-io:2.6")
@@ -21,6 +28,7 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	
 }
 
 test {
