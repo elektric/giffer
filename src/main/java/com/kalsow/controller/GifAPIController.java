@@ -1,9 +1,13 @@
 package com.kalsow.controller;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,17 +45,21 @@ public class GifAPIController {
             gif = GifDecoder.read(data);
             final int frameCount = gif.getFrameCount();
             GifModel gifModel = new GifModel();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < frameCount; i++) {
                 FrameModel frameModel = new FrameModel();
                 
                 final BufferedImage img = gif.getFrame(i);
+                BufferedImage scaledImg = convertToBufferedImage(img.getScaledInstance(20, 20, BufferedImage.SCALE_DEFAULT));
                 frameModel.setFrameNumber(i);
                 frameModel.setDelay(gif.getDelay(i));
-                int[][] pixels = IM.convertTo2DWithoutUsingGetRGB(img);
+                int[][] pixels = IM.convertTo2DWithoutUsingGetRGB(scaledImg);
                 //convert pixels to pixelModel
-                List<PixelModel> pixelModelList = IM.getAverageOfPixelsForLEDMatrix(pixels, 20, 20);
-                frameModel.setPixelModelList(pixelModelList);
+                
+                frameModel.setPixelModelList(convertPixelsToPixelModel(pixels));
                 gifModel.addFrameModelToList(frameModel);
+                
+//                File outputfile = new File("c:\\temp\\image_" + i + ".png");
+//                ImageIO.write(scaledImg, "png", outputfile);
 
             }
             
@@ -79,6 +87,31 @@ public class GifAPIController {
            }
          }
         return pixelModelList;
+    }
+    
+    /**
+     * Converts a given Image into a BufferedImage
+     *
+     * @param img The Image to be converted
+     * @return The converted BufferedImage
+     */
+    private BufferedImage convertToBufferedImage(Image img)
+    {
+        if (img instanceof BufferedImage)
+        {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
     }
     
     

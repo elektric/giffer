@@ -2,19 +2,19 @@ package com.kalsow.model;
 
 public class PixelModel {
 
-    private int red;
-    private int blue;
-    private int green;
-    private int alpha;
+    private int r;
+    private int b;
+    private int g;
+    private int a;
     private int rowLoc;
     private int colLoc;
 
     public PixelModel(int red, int green, int blue, int alpha, int rowLoc, int colLoc) {
         super();
-        this.red = red;
-        this.blue = blue;
-        this.green = green;
-        this.alpha = alpha;
+        this.r = red;
+        this.b = blue;
+        this.g = green;
+        this.a = alpha;
         this.rowLoc = rowLoc;
         this.colLoc = colLoc;
     }
@@ -24,35 +24,35 @@ public class PixelModel {
     }
 
     public int getRed() {
-        return red;
+        return r;
     }
 
     public void setRed(int red) {
-        this.red = red;
+        this.r = red;
     }
 
     public int getBlue() {
-        return blue;
+        return b;
     }
 
     public void setBlue(int blue) {
-        this.blue = blue;
+        this.b = blue;
     }
 
     public int getGreen() {
-        return green;
+        return g;
     }
 
     public void setGreen(int green) {
-        this.green = green;
+        this.g = green;
     }
 
     public int getAlpha() {
-        return alpha;
+        return a;
     }
 
     public void setAlpha(int alpha) {
-        this.alpha = alpha;
+        this.a = alpha;
     }
 
     public int getRowLoc() {
