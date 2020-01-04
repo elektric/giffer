@@ -1,13 +1,12 @@
 package com.kalsow.controller;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,13 +48,14 @@ public class GifAPIController {
                 FrameModel frameModel = new FrameModel();
                 
                 final BufferedImage img = gif.getFrame(i);
-                BufferedImage scaledImg = convertToBufferedImage(img.getScaledInstance(20, 20, BufferedImage.SCALE_DEFAULT));
+                BufferedImage scaledImg = convertToBufferedImage(img.getScaledInstance(50, 50, BufferedImage.SCALE_DEFAULT));
                 frameModel.setFrameNumber(i);
                 frameModel.setDelay(gif.getDelay(i));
-                int[][] pixels = IM.convertTo2DWithoutUsingGetRGB(scaledImg);
+                //int[][] pixels = IM.convertTo2DWithoutUsingGetRGB(scaledImg);
                 //convert pixels to pixelModel
+                frameModel.setPixelModelList(getPixelModelFromScaledImg(scaledImg));
                 
-                frameModel.setPixelModelList(convertPixelsToPixelModel(pixels));
+                //frameModel.setPixelModelList(convertPixelsToPixelModel(pixels));
                 gifModel.addFrameModelToList(frameModel);
                 
 //                File outputfile = new File("c:\\temp\\image_" + i + ".png");
@@ -72,6 +72,24 @@ public class GifAPIController {
        return null; 
     }
     
+    private List<PixelModel> getPixelModelFromScaledImg(BufferedImage scaledImg){
+        List<PixelModel> pixelModelList = new ArrayList<>();
+        for ( int x = 0; x < scaledImg.getWidth(); x++ ) {
+            for( int y = 0; y < scaledImg.getHeight(); y++ ) {
+                Color color = new Color( scaledImg.getRGB( x, y ) );
+                PixelModel pixelModel = new PixelModel();
+                pixelModel.setRowLoc(x);
+                pixelModel.setColLoc(y);
+                pixelModel.setA(color.getAlpha());
+                pixelModel.setR(color.getRed());
+                pixelModel.setG(color.getGreen());
+                pixelModel.setB(color.getBlue());
+                pixelModelList.add(pixelModel);
+            }
+        }
+        return pixelModelList;
+    }
+    
     private List<PixelModel> convertPixelsToPixelModel(int[][]pixels){
         List<PixelModel> pixelModelList = new ArrayList<>();
         for (int row = 0; row < pixels[0].length; row++) {
@@ -79,10 +97,10 @@ public class GifAPIController {
                PixelModel pixelModel = new PixelModel();
                pixelModel.setRowLoc(row);
                pixelModel.setColLoc(col);
-               pixelModel.setAlpha((pixels[row][col] >> 24) & 0xff);
-               pixelModel.setRed((pixels[row][col] >> 16) & 0xff);
-               pixelModel.setGreen((pixels[row][col] >> 8) & 0xff);
-               pixelModel.setBlue(pixels[row][col] & 0xff);
+               pixelModel.setA((pixels[row][col] >> 24) & 0xff);
+               pixelModel.setR((pixels[row][col] >> 16) & 0xff);
+               pixelModel.setG((pixels[row][col] >> 8) & 0xff);
+               pixelModel.setB(pixels[row][col] & 0xff);
                pixelModelList.add(pixelModel);
            }
          }

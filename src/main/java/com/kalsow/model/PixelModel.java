@@ -23,36 +23,36 @@ public class PixelModel {
         
     }
 
-    public int getRed() {
+    public int getR() {
         return r;
     }
 
-    public void setRed(int red) {
-        this.r = red;
+    public void setR(int r) {
+        this.r = r;
     }
 
-    public int getBlue() {
+    public int getB() {
         return b;
     }
 
-    public void setBlue(int blue) {
-        this.b = blue;
+    public void setB(int b) {
+        this.b = b;
     }
 
-    public int getGreen() {
+    public int getG() {
         return g;
     }
 
-    public void setGreen(int green) {
-        this.g = green;
+    public void setG(int g) {
+        this.g = g;
     }
 
-    public int getAlpha() {
+    public int getA() {
         return a;
     }
 
-    public void setAlpha(int alpha) {
-        this.a = alpha;
+    public void setA(int a) {
+        this.a = a;
     }
 
     public int getRowLoc() {
